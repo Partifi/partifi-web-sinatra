@@ -4,6 +4,7 @@ require 'compass' #must be loaded before sinatra
 require "sinatra/base"
 require "sequel"
 require "json"
+require "open-uri"
 
 
 module Partifi
@@ -18,7 +19,11 @@ module Partifi
     end
 
     def self.exists?(id)
-      !!self.table.first(:id => id)
+      !!self.find(id)
+    end
+
+    def self.find(id)
+      self.table.first(:id => id)
     end
 
     def self.table
@@ -64,12 +69,11 @@ module Partifi
     end
 
     get "/playlist/:id" do
+      Event.find(params[:id]).inspect
       # return playlist for event
       content_type :json
-      
-            
-      {
-	"Playlist" => [
+
+      {"Playlist" => [
 		{
 			"id" => 1,
 			"uri" => "spotify:track:7bzinfns7drLnzylnK6L9S",
@@ -86,9 +90,12 @@ module Partifi
 			"love" => [1281485772, 1281485772, 1281485772],
 			"hate" => [1281485772, 1281485772]
 		}
-	]
-}.to_json
+	]}.to_json
+   end
 
+   get "/search/:query" do
+      content_type :json
+      open("http://ws.spotify.com/search/1/track.json?q=" + URI.encode(params[:query])).read
     end
   end
 
