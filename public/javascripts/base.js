@@ -3,7 +3,7 @@
     $.fb.init();
   };
 
-  $(function () {
+  $(function () {  
     // 1 get user to select event OR get it from localstorage
     // 2 get current playing song and list from matched event
     // 3 show current playing song, bash button, list, search etc.
@@ -47,24 +47,22 @@
           FB.api('/me', function(response) {
             $.fb.opts.id = response.id;
             $.fb.opts.name = response.name;
-
+            
+            $.partifi.registerUser(response);
+            
             $(".topbar").append("<span class='user'>" + response.name + "<img src='https://graph.facebook.com/" + response.id + "/picture'></span>");
           });
 
-          FB.api('/me/events', function(response) {
-            var list = $("<ul></ul>");
-            for (i in response.data) {
-              var name = response.data[i].name,
-                  id   = response.data[i].id;
-              list.append("<li id='"+ id + "'>" + name + "</li>");
-            }
-            list.appendTo("#eventlist");
-          });
         } else {
           $(".loginbutton").show();
         }
       });
     },
+    listEvents: function(completed) {
+		FB.api('/me/events', function(response) {
+			completed(response.data);
+		});    
+    }
   });
 }(jQuery));
 

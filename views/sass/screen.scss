@@ -26,3 +26,11 @@ body {
 }
   .topbar img {max-height:40px;}
 
+#eventlist ul li {
+	cursor: pointer;
+}
+
+#playlist ul li span {
+	font-weight: bold;
+	cursor: pointer;
+}

@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="stylesheets/screen.css" media="screen" charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="/javascripts/base.js"></script>
-
+    <script src="/javascripts/partifi.js"></script>
+    
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,23 @@
           <a href="" class="loginbutton">Login</a>
         </div>
         <h1>Parti.fi</h1>
-        <div id="eventlist"></div>
+        <div id="eventlist" style='display: none'></div>
+        <div id="playlist" style='display: none'></div>
+        <div id="request" style='display: none'>
+        	<form action="" method="post">
+        		<fieldset>
+        			<ol>
+        				<li>
+        					<label for="fieldQuery">Fill in your song request</label>
+        					<input type='text' name='query' id='fieldQuery' />
+        				</li>
+        				<li>
+        					<input type='submit' name='send' value='Go' id='sendQuery' />
+        				</li>
+        			</ol>
+        		</fieldset>
+        	</form>
+        </div>        
         <div id="fb-root"></div>
         <script>
           (function(d){
