@@ -42,11 +42,12 @@
         if (response.status == "connected") {
           // logged in and connected user, someone you know
           $(".loginbutton").hide();
-
+          
           //show user icon and name
           FB.api('/me', function(response) {
             $.fb.opts.id = response.id;
             $.fb.opts.name = response.name;
+
             $(".topbar").append("<span class='user'>" + response.name + "<img src='https://graph.facebook.com/" + response.id + "/picture'></span>");
           });
 

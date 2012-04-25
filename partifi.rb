@@ -71,11 +71,13 @@ module Partifi
       {
 	"Playlist" => [
 		{
+			"id" => 1,
 			"uri" => "spotify:track:7bzinfns7drLnzylnK6L9S",
 			"love" => [1281485772, 1281485772, 1281485772],
 			"hate" => [1281485772, 1281485772]
 		},
 		{
+			"id" => 2,
 			"uri" => "spotify:track:0d2O5TNHO2T5XR95TVmgfp",
 			"love" => [1281485772, 1281485772, 1281485772],
 			"hate" => [1281485772, 1281485772]
