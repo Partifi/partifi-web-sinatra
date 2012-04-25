@@ -50,7 +50,23 @@ module Partifi
     get "/playlist/:event_id" do
       # return playlist for event
       content_type :json
-      {:bla => 'ja', :haha => 'nah'}.to_json # example
+      
+            
+      {
+	"Playlist" => [
+		{
+			"uri" => "spotify:track:7bzinfns7drLnzylnK6L9S",
+			"love" => [1281485772, 1281485772, 1281485772],
+			"hate" => [1281485772, 1281485772]
+		},
+		{
+			"uri" => "spotify:track:0d2O5TNHO2T5XR95TVmgfp",
+			"love" => [1281485772, 1281485772, 1281485772],
+			"hate" => [1281485772, 1281485772]
+		}
+	]
+}.to_json
+
     end
   end
 
