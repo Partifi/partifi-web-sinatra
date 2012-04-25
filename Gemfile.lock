@@ -7,6 +7,7 @@ GEM
       fssm (>= 0.2.7)
       sass (~> 3.1)
     fssm (0.2.9)
+    json (1.6.5)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -24,6 +25,7 @@ PLATFORMS
 
 DEPENDENCIES
   compass
+  json
   sequel
   sinatra
   sqlite3

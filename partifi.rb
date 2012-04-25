@@ -3,6 +3,7 @@ require "bundler/setup"
 require 'compass' #must be loaded before sinatra
 require "sinatra/base"
 require "sequel"
+require "json"
 
 
 module Partifi
@@ -48,7 +49,8 @@ module Partifi
 
     get "/playlist/:event_id" do
       # return playlist for event
-      200
+      content_type :json
+      {:bla => 'ja', :haha => 'nah'}.to_json # example
     end
   end
 
