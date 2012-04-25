@@ -3,5 +3,13 @@ source :rubygems
 gem "sinatra"
 gem "compass"
 gem "sequel"
-gem "sqlite3"
+
+group :production do
+    gem "pg"
+end
+
+group :development, :test do
+    gem "sqlite3"
+end
+
 gem "json"

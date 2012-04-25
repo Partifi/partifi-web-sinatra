@@ -1,4 +1,4 @@
-ENV["DATABASE_URL"] ||= "sqlite://db/participants.db"
+ENV["DATABASE_URL"] ||= "sqlite://db/partifi.db"
 require "./partifi"
 
 run Partifi::App
