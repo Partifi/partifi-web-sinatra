@@ -9,7 +9,18 @@ require "json"
 module Partifi
   DB = Sequel.connect(ENV["DATABASE_URL"])
 
-  class Events
+  class Event
+    def self.add_id(id)
+      return false if self.exists?(id)
+
+      self.table.insert(:id => id)
+      true
+    end
+
+    def self.exists?(id)
+      !!self.table.first(:id => id)
+    end
+
     def self.table
       DB[:events]
     end
@@ -47,7 +58,12 @@ module Partifi
       scss(:"sass/screen", Compass.sass_engine_options)
     end
 
-    get "/playlist/:event_id" do
+    # curl http://localhost:9292/playlist -d facebook_id=2312
+    post "/playlist" do
+      Event.add_id(params[:facebook_id]).inspect
+    end
+
+    get "/playlist/:id" do
       # return playlist for event
       content_type :json
       
