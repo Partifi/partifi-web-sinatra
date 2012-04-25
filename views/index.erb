@@ -4,8 +4,8 @@
   <head>
     <title>Parti.fi</title>
     <link rel="stylesheet" href="stylesheets/screen.css" media="screen" charset="utf-8">
-    <script>Modernizr.mq('(min-width:0)') || document.write('<script src="/javascripts/respond.min.js">\x3C/script>')</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/javascripts/base.js"></script>
 
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -17,11 +17,21 @@
   <body>
       <div class="hello">
         <div class="topbar">
-          {{> user}}
+          <a href="" class="loginbutton">Login</a>
         </div>
         <h1>Parti.fi</h1>
-        {{> events}}
+        <div id="eventlist"></div>
         <div id="fb-root"></div>
+        <script>
+          (function(d){
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement('script'); js.id = id; js.async = true;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            ref.parentNode.insertBefore(js, ref);
+          }(document));
+        </script>
       </div>
   </body>
 </html>
+
