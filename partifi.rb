@@ -28,7 +28,7 @@ module Partifi
         config.http_stylesheets_path = "/stylesheets"
         config.preferred_syntax = :scss
         config.output_style = :compressed unless environment == :development
-        config.sass_options = { cache => false }
+        config.sass_options = { :cache => false }
       end
     end
 
