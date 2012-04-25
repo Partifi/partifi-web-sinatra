@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Parti.fi</title>
+    <link rel="stylesheet" href="stylesheets/screen.css" media="screen" charset="utf-8">
+    <script>Modernizr.mq('(min-width:0)') || document.write('<script src="/javascripts/respond.min.js">\x3C/script>')</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Mobile IE Cleartype -->
+    <meta http-equiv="cleartype" content="on">
+  </head>
+
+  <body>
+      <div class="hello">
+        <div class="topbar">
+          {{> user}}
+        </div>
+        <h1>Parti.fi</h1>
+        {{> events}}
+        <div id="fb-root"></div>
+      </div>
+  </body>
+</html>
