@@ -14,7 +14,7 @@
   $.extend($.fb, {
     init: function () {
       FB.init({
-        appId: '342859172429389',
+        appId: window.FACEBOOKAPPID,
         cookie: true,
         status: true,
         xfbml: true

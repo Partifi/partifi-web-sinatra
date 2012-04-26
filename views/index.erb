@@ -7,7 +7,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="/javascripts/base.js"></script>
     <script src="/javascripts/partifi.js"></script>
-    
+    <script type="text/javascript" charset="utf-8">
+    <% if ENV['RACK_ENV'] == 'production' %>// production
+      var FACEBOOKAPPID = 253709418060474;
+    <% else %>// development
+      var FACEBOOKAPPID = 342859172429389;
+    <% end %>
+    </script>
+
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,25 +30,25 @@
         <h1>Parti.fi</h1>
         <div id="eventlist" style='display: none'></div>
         <div id="playlist" style='display: none'>
-        	<div class='container'></div>
-        	<a href="#" class="requestbutton">Request a song</a>
+          <div class='container'></div>
+          <a href="#" class="requestbutton">Request a song</a>
         </div>
         <div id="request" style='display: none'>
-        	<p class='error' style='display: none'>No songs found</p>
-        	<form action="" method="post">
-        		<fieldset>
-        			<ol>
-        				<li>
-        					<label for="fieldQuery">Fill in your song request</label>
-        					<input type='text' name='query' id='fieldQuery' />
-        				</li>
-        				<li>
-        					<input type='submit' name='send' value='Go' id='sendQuery' />
-        				</li>
-        			</ol>
-        		</fieldset>
-        	</form>
-        </div>        
+          <p class='error' style='display: none'>No songs found</p>
+          <form action="" method="post">
+            <fieldset>
+              <ol>
+                <li>
+                  <label for="fieldQuery">Fill in your song request</label>
+                  <input type='text' name='query' id='fieldQuery' />
+                </li>
+                <li>
+                  <input type='submit' name='send' value='Go' id='sendQuery' />
+                </li>
+              </ol>
+            </fieldset>
+          </form>
+        </div>
         <div id="fb-root"></div>
         <script>
           (function(d){
@@ -51,11 +58,11 @@
             js.src = "//connect.facebook.net/en_US/all.js";
             ref.parentNode.insertBefore(js, ref);
           }(document));
-          
+
           $(function() {
-		 	$.partifi.init();
-		  });
-		  
+       $.partifi.init();
+      });
+
         </script>
       </div>
   </body>
