@@ -1,8 +1,9 @@
 ##  These migrations can be executed from the project's root directory like so:
 ##
-##    $ rackup -Ilib db/migrations.rb
+##    $ rm db/partifi.db; ruby db/migrations.rb
 ##
 
+ENV["DATABASE_URL"] ||= "sqlite://db/partifi.db" # FIXME: not DRY
 
 require File.expand_path("../partifi", File.basename(__FILE__))
 
@@ -29,6 +30,6 @@ Partifi::DB.create_table :votes do
   primary_key :id
   Integer :song_id
   Integer :user_id
-  enum :status, :elements => ['love', 'hate']
+  String :status
   add_index [:song_id, :user_id], :unique => true
 end
