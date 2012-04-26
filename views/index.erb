@@ -23,12 +23,52 @@
   </head>
 
   <body>
-      <div class="hello">
-        <div class="topbar">
-          <a href="" class="loginbutton">Login</a>
+         <div id="topbar">
+          <h1><img src="/img/topicon.png"></h1>
+          <h2 id="tagline">Killing the 30 second DJ</h2>
+          <div id="user">
+            <div id="user_photo"></div>
+            <div id="user_info"></div>
+          </div>
         </div>
+        <div id="wrapper">
+          <div id="index" class="section">
+
+            <div id="fblogin">
+              <h1><img src="/img/logo.png"></h1>
+              <img src="/img/fb-login.png" id="fb-login" />
+            </div>
+
+            <div id="events"  style='display: none'>
+              <h1>Choose event</h1>
+              <ul></ul>
+            </div>
+          <div id="current-song" style='display: none'>
+            <h3>Current Song</h3>
+            <h2></h2>
+            <div id='hates'></div>
+            <a href='#' id='current-song-hate'><img src='/img/heart-dislike.png' /></a>
+          </div>
+        <div id="request" style='display: none'>
+          <p class='error' style='display: none'>No songs found</p>
+          <form action="" method="post">
+			<p><input type='text' name='query' id='fieldQuery' placeholder="Fill in your song request" /> <input type='submit' name='send' value='Go' id='sendQuery' /></p>
+          </form>
+        </div>		  
+          <div id="top10"  style='display: none'>
+            <h3>Upcoming Songs</h3>
+            <table>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          </div><!-- /index -->
+        </div><!-- /wrapper -->
+
+
+<!--      <div id="index">
         <h1>Parti.fi</h1>
-        <div id="eventlist" style='display: none'></div>
+       <div id="eventlist" style='display: none'></div>
         <div id="playlist" style='display: none'>
           <div id='current-song'>
           	<h2>Current song</h2>
@@ -55,6 +95,7 @@
             </fieldset>
           </form>
         </div>
+        -->
         <div id="fb-root"></div>
         <script>
           (function(d){

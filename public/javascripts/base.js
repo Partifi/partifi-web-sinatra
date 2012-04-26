@@ -25,7 +25,7 @@
         id: '',
       }
       //bind login button
-      $(".loginbutton").bind('click', function () {
+      $("#fb-login").bind('click', function () {
         FB.login(function (response) {
           if (response.session) {
             $.fb.loggedIn();
@@ -33,7 +33,7 @@
         }, {scope: 'user_events'});
         return false;
       });
-
+      
       //check current status
       this.loggedIn();
     },
@@ -41,7 +41,7 @@
       FB.getLoginStatus(function (response) {
         if (response.status == "connected") {
           // logged in and connected user, someone you know
-          $(".loginbutton").hide();
+          $("#fb-login").hide();
           
           //show user icon and name
           FB.api('/me', function(response) {
@@ -50,11 +50,12 @@
             
             $.partifi.registerUser(response);
             
-            $(".topbar").append("<span class='user'>" + response.name + "<img src='https://graph.facebook.com/" + response.id + "/picture'></span>");
+            $("#topbar").append("<span id='user'>" + response.name + "<img src='https://graph.facebook.com/" + response.id + "/picture'></span>");
           });
 
         } else {
-          $(".loginbutton").show();
+          
+          $("#fb-login").show();
         }
       });
     },

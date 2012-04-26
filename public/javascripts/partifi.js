@@ -17,7 +17,7 @@
 			return false;
 		});
 		
-		$(".requestbutton").click(function() {			
+		$("#requestbutton").click(function() {			
 			
 			$this.hidePlaylist();
 			$this.showRequest();
@@ -26,7 +26,7 @@
 		});
 		
 		$('#current-song-hate').click(function() {
-			$this.vote(this.opts.song, "hate");
+			$this.vote($this.opts.song, "hate");
 		
 			return false;
 		});
@@ -35,9 +35,7 @@
   	  	var $this = this;
   	  	
 		this.opts.user = user;
-		
-		console.log(user);		
-		
+				
 		$.fb.listEvents(function(data) {
 			$this.showEvents(data);
 		});
@@ -59,10 +57,10 @@
 		  ul.append(li);
 		});
 		
-		$("#eventlist").html(ul).show();	
+		$("#events").html(ul).show();	
 	},
 	hideEvents: function() {
-		$("#eventlist").hide();
+		$("#events").hide();
 	},
 	registerEvent: function(event) {
 		this.opts.event = event;
@@ -84,8 +82,9 @@
 	},	
 	showPlaylist: function(songs) {
 		var $this = this;
-	
-		var ul = $("<ul></ul>");
+		
+		$("#top10 tbody").empty();
+		
 		$(songs).each(function(index, item) {
 			if (index == 0) {
 				$this.showCurrent(item);
@@ -94,17 +93,16 @@
 			
 			var name = item.artist + " - " + item.name;
 			
-			var li = $("<li data-index='"+ index + "'>" + name + " <span data-status='love'>Love</span> <span data-status='hate'>Hate</span></li>");
+			var li = $("<tr><td width='140'>" + item.name + "</td><td width='140'>" + item.artist + "</td><td><span data-status='love'><img src='/img/heart.png' /></span></td><td><span data-status='hate'><img src='/img/heart-dislike.png' /></span></td>");
 			
 			li.find('span').click(function() {
 				$this.vote(item, $(this).attr('data-status'));
 			});
 			
-			ul.append(li);
+			$("#top10 tbody").append(li);			
 		});
 		
-		$("#playlist .container").html(ul);
-		$("#playlist").show();
+		$("#top10").show();
 
 	},	
 	showCurrent: function(song) {
@@ -113,7 +111,10 @@
 		this.opts.song = song;
 		
 		$('#current-song').show();
-		$('#current-songe-title').text(song.artist + " - " + song.name);
+		$('#request').show();
+		
+		$('#hates').text(song.hater.length);
+		$('#current-song h2').text(song.artist + " - " + song.name);
 	},
 	hidePlaylist: function() {
 		$('#playlist').hide();
@@ -132,10 +133,10 @@
 		});
 	},
 	showRequest: function() {
-		$('#request').show();
+//		$('#request').show();
 	},
 	hideRequest: function() {
-		$('#request').hide();
+//		$('#request').hide();
 	},
 	searchTrack: function(query) {
 		var $this = this;
