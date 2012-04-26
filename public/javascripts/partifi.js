@@ -27,7 +27,7 @@
 		
 		$('#current-song-hate').click(function() {
 			console.log($this.opts.song);
-			
+					
 			$this.vote($this.opts.song, "hate");
 			
 			return false;
@@ -144,7 +144,7 @@
 	},
 	searchTrack: function(query) {
 		var $this = this;
-		
+				
 		$.getJSON("/search/" + escape(query), function(data) {
 			$this.searchTrackResult(data);
 		});
