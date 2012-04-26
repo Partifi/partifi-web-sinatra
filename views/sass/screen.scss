@@ -25,12 +25,13 @@ body {
   color:#fff;
 }
   .topbar img {max-height:40px;}
+  .topbar a {color: #EEE;}
 
 #eventlist ul li {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 #playlist ul li span {
-	font-weight: bold;
-	cursor: pointer;
+  font-weight: bold;
+  cursor: pointer;
 }
