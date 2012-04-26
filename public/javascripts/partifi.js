@@ -80,7 +80,10 @@
 	
 		var ul = $("<ul></ul>");
 		$(songs).each(function(index, item) {
-			console.log(item);
+			if (index == 0) {
+				$this.showCurrent(item);
+				return;
+			}
 			
 			var name = item.artist + " - " + item.name;
 			
@@ -97,6 +100,14 @@
 		$("#playlist").show();
 
 	},	
+	showCurrent: function(song) {
+		var $this = this;
+
+		
+		$('#current-song h2').text(currentTrack.artists[0].name + " - " + song.name);
+		$('#current-song-image').html("<img src='"+song.image+"' />");
+
+	},
 	hidePlaylist: function() {
 		$('#playlist').hide();
 	},

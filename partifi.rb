@@ -5,6 +5,7 @@ require "sinatra/base"
 require "sequel"
 require "json"
 require "open-uri"
+require "hallon"
 
 module Partifi
   DB = Sequel.connect(ENV["DATABASE_URL"])
@@ -35,6 +36,10 @@ module Partifi
       self.table.insert(data)
       true
     end
+
+	def self.image_add(href, img)
+		self.table.filter(:href => href).update(:img => img);
+	end
 
     def self.exists?(id)
       !!self.find(id)
@@ -103,15 +108,19 @@ module Partifi
       Event.add_id(params[:event_id]).inspect
     end
 
-    post "/playlist/:event_id" do
-    Songs.add({
-      "name" => params[:name],
-      "artist" => params[:artist],
-      "href" => params[:uri],
-      "event_id" => params[:event_id]
-    }).inspect
+    post "/playlist/:event_id" do  
+	    Songs.add({
+	      "name" => params[:name],
+	      "artist" => params[:artist],
+	      "href" => params[:uri],
+	      "event_id" => params[:event_id]
+	    }).inspect
     end
-
+	
+	post "/update/:uri" do
+		Songs.image_add(params[:uri], params[:img]).inspect
+	end
+	
     get "/playlist/:id" do
       content_type :json
 
@@ -131,7 +140,7 @@ module Partifi
       content_type :json
       open("http://ws.spotify.com/search/1/track.json?q=" + URI.encode(params[:query])).read
     end
-
+		
     post "/vote/:id" do
       Votes.create_or_update(:song_id => params[:id], :status => params[:status], :user_id => params[:user_id])
 

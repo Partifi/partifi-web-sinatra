@@ -18,6 +18,7 @@ Partifi::DB.create_table :songs do
   String :name
   String :artist
   String :href
+  String :img
   Interger :event_id
   Time :created_at
   Time :updated_at
