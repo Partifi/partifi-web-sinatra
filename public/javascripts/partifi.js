@@ -7,7 +7,8 @@
   		  		
   		this.opts = {
   			user: null,
-  			event: null
+  			event: null,
+  			song: null
   		};
   		
 		$('#request').submit(function() {		
@@ -20,6 +21,12 @@
 			
 			$this.hidePlaylist();
 			$this.showRequest();
+		
+			return false;
+		});
+		
+		$('#current-song-hate').click(function() {
+			$this.vote(this.opts.song, "hate");
 		
 			return false;
 		});
@@ -102,6 +109,9 @@
 	},	
 	showCurrent: function(song) {
 		var $this = this;
+		
+		this.opts.song = song;
+		
 		$('#current-song').show();
 		$('#current-songe-title').text(song.artist + " - " + song.name);
 	},
