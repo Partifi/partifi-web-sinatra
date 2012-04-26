@@ -31,8 +31,9 @@ module Partifi
   end
 
   class Songs
-    def self.add(data)
-      self.table.insert(data)
+    def self.add(data = {}, user_id = nil)
+      song_id = self.table.insert(data)
+      Votes.create_or_update(:song_id => song_id, :user_id => user_id, :status => 'love') if user_id
       true
     end
 
@@ -81,7 +82,6 @@ module Partifi
       end
       songs_and_rank.compact!
       songs_and_rank.sort! {|a,b| b[1] <=> a[1]}
-      puts songs_and_rank.inspect
       songs_and_rank.map {|song, _, lovers, haters|
          song.to_hash.merge(:lovers => lovers, :haters => haters) }
     end
@@ -134,14 +134,12 @@ module Partifi
         "artist" => params[:artist],
         "href" => params[:uri],
         "event_id" => params[:event_id]
-      }).inspect
+      }, params[:user_id]).inspect
     end
 
     get "/playlist/:id" do
       content_type :json
 
-      # TODO: order by love/hate status
-      # result = Songs.find(params[:id]).naked.all
       songs = Songs.find(params[:id]).all
       result = Votes.order_songs_by_votes(songs).map(&:to_hash)
 
