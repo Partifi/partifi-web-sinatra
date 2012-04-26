@@ -104,8 +104,8 @@
 		var $this = this;
 
 		
-		$('#current-song h2').text(currentTrack.artists[0].name + " - " + song.name);
-		$('#current-song-image').html("<img src='"+song.image+"' />");
+		$('#current-song h2').text(song.artist + " - " + song.name);
+		$('#current-song-image').html("<img src='"+song.img+"' />");
 
 	},
 	hidePlaylist: function() {
