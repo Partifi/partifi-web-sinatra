@@ -26,8 +26,10 @@
 		});
 		
 		$('#current-song-hate').click(function() {
+			console.log($this.opts.song);
+			
 			$this.vote($this.opts.song, "hate");
-		
+			
 			return false;
 		});
   	},
@@ -84,6 +86,8 @@
 		var $this = this;
 		
 		$("#top10 tbody").empty();
+		
+		songs.reverse();
 		
 		$(songs).each(function(index, item) {
 			if (index == 0) {
