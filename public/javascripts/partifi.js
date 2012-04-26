@@ -102,8 +102,7 @@
 	},	
 	showCurrent: function(song) {
 		var $this = this;
-
-		
+		$('#current-song').show();
 		$('#current-song h2').text(song.artist + " - " + song.name);
 		$('#current-song-image').html("<img src='"+song.img+"' />");
 
