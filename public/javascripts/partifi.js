@@ -76,7 +76,7 @@
 				
 		var event = this.opts.event;
 		
-		$.getJSON('/playlist/' + event.id, function(data) {
+		$.getJSON(this.playListUrlWithTimestamp(event.id), function(data) {
 			$this.showPlaylist(data.Playlist);
 		});
 	},	
@@ -176,9 +176,13 @@
 			artist: artists.join(", ")
 		}
 		
-		$.post('/playlist/' + event.id, data, function(data) {
+		$.post(this.playListUrlWithTimestamp(event.id), data, function(data) {
 			$this.loadPlaylist();
 		});
+	},
+	playListUrlWithTimestamp: function(event_id) {
+	  var timestamp = new Date().getTime();
+    return '/playlist/'+ event_id + '?r= ' + timestamp
 	}
   });
   
