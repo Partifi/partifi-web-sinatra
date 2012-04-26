@@ -115,35 +115,15 @@ module Partifi
     get "/playlist/:id" do
       content_type :json
 
-      result = Songs.find(params[:id]).naked.all
+      result = Songs.find(params[:id]).naked.left_join(:votes, :song_id => :id).all
 
-    playlist = { "Playlist" => []}
+      playlist = { "Playlist" => []}
 
-    if result
-      playlist = { "Playlist" => result }
-    end
+      if result
+        playlist = { "Playlist" => result }
+      end
 
-    playlist.to_json
-      # return playlist for event
-
-#      {"Playlist" => [
-#    {
-#      "id" => 1,
-#      "uri" => "spotify:track:7bzinfns7drLnzylnK6L9S",
-#      "name" => "Animal",
-#      "artist" => "Miike Snow",
-#      "love" => [1281485772, 1281485772, 1281485772],
-#      "hate" => [1281485772, 1281485772]
-#    },
-#    {
-#      "id" => 2,
-#      "uri" => "spotify:track:0d2O5TNHO2T5XR95TVmgfp",
-#      "name" => "Default",
-#      "artist" => "Django Django",
-#      "love" => [1281485772, 1281485772, 1281485772],
-#      "hate" => [1281485772, 1281485772]
-#    }
-#  ]}.to_json
+      playlist.to_json
    end
 
     get "/search/:query" do
