@@ -1,4 +1,10 @@
-require "partifi"
+##  These migrations can be executed from the project's root directory like so:
+##
+##    $ rackup -Ilib db/migrations.rb
+##
+
+
+require File.expand_path("../partifi", File.basename(__FILE__))
 
 Partifi::DB.create_table :events do
   primary_key :id
