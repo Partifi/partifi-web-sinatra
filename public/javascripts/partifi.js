@@ -113,7 +113,7 @@
 		$('#current-song').show();
 		$('#request').show();
 		
-		$('#hates').text(song.hater.length);
+		//$('#current-song-hate').text(song.haters.length);
 		$('#current-song h2').text(song.artist + " - " + song.name);
 	},
 	hidePlaylist: function() {
