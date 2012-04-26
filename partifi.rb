@@ -41,7 +41,11 @@ module Partifi
     end
 
     def self.find(id)
-      self.table.filter(:event_id => id)
+      self.table.filter(:event_id => id, :deleted_at => nil)
+    end
+
+    def self.remove_from_event(params = {})
+      self.table.filter(:event_id => params[:event_id], :href => params[:song], :deleted_at => nil).update(:deleted_at => Time.now)
     end
 
     def self.table
@@ -51,7 +55,7 @@ module Partifi
 
   class Votes
 
-    def self.create_or_update(params)
+    def self.create_or_update(params = {})
       existing_vote = self.table.where({:user_id => params[:user_id], :song_id => params[:song_id]}).first
 
       if existing_vote
@@ -116,7 +120,7 @@ module Partifi
       content_type :json
 
       # TODO: order by love/hate status
-      result = Songs.find(params[:id]).naked.left_join(:votes, :song_id => :id).all
+      result = Songs.find(params[:id]).naked.all
 
       playlist = { "Playlist" => []}
 
@@ -135,6 +139,12 @@ module Partifi
     post "/vote/:id" do
       Votes.create_or_update(:song_id => params[:id], :status => params[:status], :user_id => params[:user_id])
 
+      200
+    end
+
+    # TODO: make more restful with delete action
+    post "/playlist/:event_id/:song_href" do
+      Songs.remove_from_event(:song => params[:song_href], :event_id => params[:event_id])
       200
     end
 
