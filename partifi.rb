@@ -36,10 +36,6 @@ module Partifi
       true
     end
 
-	def self.image_add(href, img)
-		self.table.filter(:href => href).update(:img => img);
-	end
-
     def self.exists?(id)
       !!self.find(id)
     end
@@ -67,6 +63,27 @@ module Partifi
       else
         self.table.insert(params)
       end
+    end
+
+    def self.order_songs_by_votes(songs)
+      ids = songs.map {|s| s[:id]}
+      songs_and_rank = []
+      songs.each {|s| songs_and_rank[s[:id]] = [s, 0, [], []]} # maps to [song, rank, love, hate]
+      self.table.filter(:song_id => ids).all.each do |vote|
+        ranking = songs_and_rank[vote[:song_id]]
+        if vote[:status] == 'love' then
+          ranking[1] += 1
+          ranking[2] << vote[:user_id] # love
+        else
+          ranking[1] -= 1
+          ranking[3] << vote[:user_id] # hate
+        end
+      end
+      songs_and_rank.compact!
+      songs_and_rank.sort! {|a,b| b[1] <=> a[1]}
+      puts songs_and_rank.inspect
+      songs_and_rank.map {|song, _, lovers, haters|
+         song.to_hash.merge(:lovers => lovers, :haters => haters) }
     end
 
     def self.table
@@ -111,24 +128,22 @@ module Partifi
       Event.add_id(params[:event_id]).inspect
     end
 
-    post "/playlist/:event_id" do  
-	    Songs.add({
-	      "name" => params[:name],
-	      "artist" => params[:artist],
-	      "href" => params[:uri],
-	      "event_id" => params[:event_id]
-	    }).inspect
+    post "/playlist/:event_id" do
+      Songs.add({
+        "name" => params[:name],
+        "artist" => params[:artist],
+        "href" => params[:uri],
+        "event_id" => params[:event_id]
+      }).inspect
     end
-	
-	post "/update/:uri" do
-		Songs.image_add(params[:uri], params[:img]).inspect
-	end
-	
+
     get "/playlist/:id" do
       content_type :json
 
       # TODO: order by love/hate status
-      result = Songs.find(params[:id]).naked.all
+      # result = Songs.find(params[:id]).naked.all
+      songs = Songs.find(params[:id]).all
+      result = Votes.order_songs_by_votes(songs).map(&:to_hash)
 
       playlist = { "Playlist" => []}
 
@@ -143,7 +158,7 @@ module Partifi
       content_type :json
       open("http://ws.spotify.com/search/1/track.json?q=" + URI.encode(params[:query])).read
     end
-		
+
     post "/vote/:id" do
       Votes.create_or_update(:song_id => params[:id], :status => params[:status], :user_id => params[:user_id])
 
