@@ -5,7 +5,6 @@ require "sinatra/base"
 require "sequel"
 require "json"
 require "open-uri"
-require "hallon"
 
 module Partifi
   DB = Sequel.connect(ENV["DATABASE_URL"])
