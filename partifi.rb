@@ -32,9 +32,10 @@ module Partifi
 
   class Songs
     def self.add(data)
-    self.table.insert(data)
-    true
-  end
+      self.table.insert(data)
+      true
+    end
+
     def self.exists?(id)
       !!self.find(id)
     end
@@ -45,6 +46,23 @@ module Partifi
 
     def self.table
       DB[:songs]
+    end
+  end
+
+  class Votes
+
+    def self.create_or_update(params)
+      existing_vote = self.table.where({:user_id => params[:user_id], :song_id => params[:song_id]}).first
+
+      if existing_vote
+        self.table.filter(:id => existing_vote[:id]).update(:status => params[:status])
+      else
+        self.table.insert(params)
+      end
+    end
+
+    def self.table
+      DB[:votes]
     end
   end
 
@@ -128,10 +146,17 @@ module Partifi
 #  ]}.to_json
    end
 
-   get "/search/:query" do
+    get "/search/:query" do
       content_type :json
       open("http://ws.spotify.com/search/1/track.json?q=" + URI.encode(params[:query])).read
     end
+
+    post "/vote/:id" do
+      Votes.create_or_update(:song_id => params[:id], :status => params[:status], :user_id => params[:user_id])
+
+      200
+    end
+
   end
 
 end
