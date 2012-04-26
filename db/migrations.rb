@@ -31,5 +31,5 @@ Partifi::DB.create_table :votes do
   Integer :song_id
   Integer :user_id
   String :status
-  add_index [:song_id, :user_id], :unique => true
+  unique [:song_id, :user_id]
 end
