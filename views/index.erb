@@ -22,8 +22,12 @@
         </div>
         <h1>Parti.fi</h1>
         <div id="eventlist" style='display: none'></div>
-        <div id="playlist" style='display: none'></div>
+        <div id="playlist" style='display: none'>
+        	<div class='container'></div>
+        	<a href="#" class="requestbutton">Request a song</a>
+        </div>
         <div id="request" style='display: none'>
+        	<p class='error' style='display: none'>No songs found</p>
         	<form action="" method="post">
         		<fieldset>
         			<ol>
@@ -47,6 +51,11 @@
             js.src = "//connect.facebook.net/en_US/all.js";
             ref.parentNode.insertBefore(js, ref);
           }(document));
+          
+          $(function() {
+		 	$.partifi.init();
+		  });
+		  
         </script>
       </div>
   </body>

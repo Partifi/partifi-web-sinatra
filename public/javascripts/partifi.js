@@ -4,17 +4,23 @@
   $.extend($.partifi, {
   	init: function() {
   		var $this = this;
-  	
+  		  		
   		this.opts = {
   			user: null,
   			event: null
-  		}
+  		};
   		
-		$('#request').submit(function(event) {
-			event.stopPropagation();
-		
+		$('#request').submit(function() {		
 			$this.searchTrack($('#request input[name=query]').val());
 			
+			return false;
+		});
+		
+		$(".requestbutton").click(function() {			
+			
+			$this.hidePlaylist();
+			$this.showRequest();
+		
 			return false;
 		});
   	},
@@ -39,6 +45,7 @@
 		  var li = $("<li data-index='"+ index + "'>" + name + "</li>");
 		  
 		  li.click(function() {
+		 	console.log(item);
 		  	$this.registerEvent(item);
 		  });
 		      
@@ -53,14 +60,16 @@
 	registerEvent: function(event) {
 		this.opts.event = event;
 		
+		console.log(this.opts.event);
+		
 		this.hideEvents();
 		
 		this.loadPlaylist();
 	},
 	loadPlaylist: function() {
 		var $this = this;
-		
-		var event = this.opts.event.id;
+				
+		var event = this.opts.event;
 		
 		$.getJSON('/playlist/' + event.id, function(data) {
 			$this.showPlaylist(data.Playlist);
@@ -75,7 +84,7 @@
 			
 			var name = item.artist + " - " + item.name;
 			
-			var li = $("<li data-index='"+ index + "'>" + name + "</li> <span data-status='love'>Love</span> <span data-status='hate'>Hate</span>");
+			var li = $("<li data-index='"+ index + "'>" + name + " <span data-status='love'>Love</span> <span data-status='hate'>Hate</span></li>");
 			
 			li.find('span').click(function() {
 				$this.vote(item, $(this).attr('data-status'));
@@ -84,7 +93,9 @@
 			ul.append(li);
 		});
 		
-		$("#playlist").html(ul).show();
+		$("#playlist .container").html(ul);
+		$("#playlist").show();
+
 	},	
 	hidePlaylist: function() {
 		$('#playlist').hide();
@@ -102,13 +113,54 @@
 			$this.loadPlaylist();
 		});
 	},
+	showRequest: function() {
+		$('#request').show();
+	},
+	hideRequest: function() {
+		$('#request').hide();
+	},
 	searchTrack: function(query) {
 		var $this = this;
 		
+		$.getJSON("/search/" + escape(query), function(data) {
+			$this.searchTrackResult(data);
+		});
+	},
+	searchTrackResult: function(data) {
+	
+		if (data.tracks.length == 0) {
+			$('#request .error').show();
+			return;
+		}
+		
+		$('#request .error').hide();		
+	
+		this.sendTrack(data.tracks[0]);
+	},
+	sendTrack: function(track) {	
+		var $this = this;
+		var event = this.opts.event;
+		var user = this.opts.user;
+		
+		this.hideRequest();
+		
+		var artists = [];
 				
+		$(track.artists).each(function(index, item) {
+			artists.push(item.name);
+		});
+		
+		var data = {
+			user_id: user.id,
+			uri: track.href,
+			name: track.name,
+			artist: artists.join(", ")
+		}
+		
+		$.post('/playlist/' + event.id, data, function(data) {
+			$this.loadPlaylist();
+		});
 	}
   });
   
-  $.partifi.init();
 }(jQuery));
-
