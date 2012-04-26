@@ -29,12 +29,12 @@ module Partifi
       DB[:events]
     end
   end
-  
+
   class Songs
-  	def self.add(data)
-		self.table.insert(data)
-		true
-	end
+    def self.add(data)
+    self.table.insert(data)
+    true
+  end
     def self.exists?(id)
       !!self.find(id)
     end
@@ -47,7 +47,7 @@ module Partifi
       DB[:songs]
     end
   end
-  
+
   class App < Sinatra::Base
     set :static, true
     set :sass_mtime, File.mtime(File.join(root, "views/sass"))
@@ -86,46 +86,46 @@ module Partifi
     end
 
     post "/playlist/:event_id" do
-		Songs.add({
-			"name" => params[:name],
-			"artist" => params[:artist],
-			"href" => params[:uri],
-			"event_id" => params[:event_id]
-		}).inspect
+    Songs.add({
+      "name" => params[:name],
+      "artist" => params[:artist],
+      "href" => params[:uri],
+      "event_id" => params[:event_id]
+    }).inspect
     end
 
     get "/playlist/:id" do
       content_type :json
-      
+
       result = Songs.find(params[:id]).naked.all
-	  
-	  playlist = { "Playlist" => []}
-	        
-	  if result
-		  playlist = { "Playlist" => result }
-	  end
-	  
-	  playlist.to_json
+
+    playlist = { "Playlist" => []}
+
+    if result
+      playlist = { "Playlist" => result }
+    end
+
+    playlist.to_json
       # return playlist for event
 
 #      {"Playlist" => [
-#		{
-#			"id" => 1,
-#			"uri" => "spotify:track:7bzinfns7drLnzylnK6L9S",
-#			"name" => "Animal",
-#			"artist" => "Miike Snow",
-#			"love" => [1281485772, 1281485772, 1281485772],
-#			"hate" => [1281485772, 1281485772]
-#		},
-#		{
-#			"id" => 2,
-#			"uri" => "spotify:track:0d2O5TNHO2T5XR95TVmgfp",
-#			"name" => "Default",
-#			"artist" => "Django Django",
-#			"love" => [1281485772, 1281485772, 1281485772],
-#			"hate" => [1281485772, 1281485772]
-#		}
-#	]}.to_json
+#    {
+#      "id" => 1,
+#      "uri" => "spotify:track:7bzinfns7drLnzylnK6L9S",
+#      "name" => "Animal",
+#      "artist" => "Miike Snow",
+#      "love" => [1281485772, 1281485772, 1281485772],
+#      "hate" => [1281485772, 1281485772]
+#    },
+#    {
+#      "id" => 2,
+#      "uri" => "spotify:track:0d2O5TNHO2T5XR95TVmgfp",
+#      "name" => "Default",
+#      "artist" => "Django Django",
+#      "love" => [1281485772, 1281485772, 1281485772],
+#      "hate" => [1281485772, 1281485772]
+#    }
+#  ]}.to_json
    end
 
    get "/search/:query" do
