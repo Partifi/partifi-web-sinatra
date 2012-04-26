@@ -115,6 +115,7 @@ module Partifi
     get "/playlist/:id" do
       content_type :json
 
+      # TODO: order by love/hate status
       result = Songs.find(params[:id]).naked.left_join(:votes, :song_id => :id).all
 
       playlist = { "Playlist" => []}
