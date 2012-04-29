@@ -54,6 +54,10 @@ module Partifi
       self.table.filter(:event_id => id, :deleted_at => nil)
     end
 
+    def self.upcoming_by_href(href)
+      self.table.filter(:href => href)
+    end
+
     def self.remove_from_event(params = {})
       self.table.filter(:event_id => params[:event_id], :href => params[:song], :deleted_at => nil).update(:deleted_at => Time.now)
     end
@@ -184,6 +188,20 @@ module Partifi
     get "/attendees/:event_id" do
       content_type :json
       Event.attendees(params[:event_id]).to_json
+    end
+
+    get '/current_song/:event_id' do
+      content_type :json
+      event = Event.find(params[:event_id])
+      event = Event.add_id(params[:event_id]) if event.nil?
+
+      song_href = event[:current_song]
+      Votes.for_songs(Songs.upcoming_by_href(song_href)).maps{|v| v[:user_id]}.uniq.to_json
+    end
+
+    post '/current_song/:event_id' do
+      Event.where(:id => params[:event_id]).update(:current_song => params[:uri])
+      200
     end
 
   end

@@ -9,6 +9,7 @@ require File.expand_path("../partifi", File.basename(__FILE__))
 
 Partifi::DB.create_table :events do
   primary_key :id
+  String :current_song
   Time :starts_at
   Time :ends_at
 end
