@@ -62,6 +62,14 @@ module Partifi
       self.table.filter(:event_id => params[:event_id], :href => params[:song], :deleted_at => nil).update(:deleted_at => Time.now)
     end
 
+    def self.set_currently_playing_track_to(params = {})
+      self.table.filter(:event_id => params[:event_id], :href => params[:href]).update(:currently_playing => true)
+    end
+
+    def self.purge_currently_playing_track(event_id)
+      self.table.filter(:event_id => event_id, :currently_playing => true).update(:currently_playing => false, :deleted_at => Time.now)
+    end
+
     def self.table
       DB[:songs]
     end
@@ -196,8 +204,8 @@ module Partifi
     end
 
     post '/current_song/:event_id' do
-      Songs.table.filter(:event_id => params[:event_id], :currently_playing => true).update(:currently_playing => true, :deleted_at => Time.now)
-      Songs.table.filter(:event_id => params[:event_id], :href => params[:uri]).update(:currently_playing => true)
+      Songs.purge_currently_playing_track(params[:event_id])
+      Songs.set_currently_playing_track_to(:event_id => params[:event_id], :href => params[:href])
       200
     end
 
