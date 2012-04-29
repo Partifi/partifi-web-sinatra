@@ -79,28 +79,27 @@
 		var event = this.opts.event;
 		
 		$.getJSON(this.playListUrlWithTimestamp(event.id), function(data) {
-			$this.showPlaylist(data.Playlist);
+		  $this.showCurrent(data.Playlist)
+			$this.showUpcomingPlaylist(data.Playlist);
 		});
 	},	
-	showPlaylist: function(songs) {
+	showUpcomingPlaylist: function(songs) {
 		var $this = this;
 		
 		$("#top10 tbody").empty();
 		
-		songs.reverse();
+		$('#request').show();
 		
-		$(songs).each(function(index, item) {
-			if (index == 0) {
-				$this.showCurrent(item);
-				return;
-			}
+		$(songs).each(function(index, song) {
+		  // skip the current song for this list
+		  if ($this.isCurrentSong(song)) { return };
 			
-			var name = item.artist + " - " + item.name;
+			var name = song.artist + " - " + song.name;
 			
-			var li = $("<tr><td width='140'>" + item.name + "</td><td width='140'>" + item.artist + "</td><td><span data-status='love'><img src='/img/heart.png' /></span></td><td><span data-status='hate'><img src='/img/heart-dislike.png' /></span></td>");
+			var li = $("<tr><td width='140'>" + song.name + "</td><td width='140'>" + song.artist + "</td><td><span data-status='love'><img src='/img/heart.png' /></span></td><td><span data-status='hate'><img src='/img/heart-dislike.png' /></span></td>");
 			
 			li.find('span').click(function() {
-				$this.vote(item, $(this).attr('data-status'));
+				$this.vote(song, $(this).attr('data-status'));
 			});
 			
 			$("#top10 tbody").append(li);			
@@ -108,17 +107,24 @@
 		
 		$("#top10").show();
 
-	},	
-	showCurrent: function(song) {
+	},
+	showCurrent: function(songs) {
 		var $this = this;
+		var currentSong = null;
 		
-		this.opts.song = song;
+		$(songs).each(function(i, song) {
+		  if ($this.isCurrentSong(song)) { currentSong = song };
+		});
 		
-		$('#current-song').show();
-		$('#request').show();
-		
-		//$('#current-song-hate').text(song.haters.length);
-		$('#current-song h2').text(song.artist + " - " + song.name);
+		this.opts.song = currentSong;
+
+		if (currentSong) {
+  		$('#current-song').show();
+  		$('#current-song h2').text(currentSong.artist + " - " + currentSong.name);
+		};
+	},
+	isCurrentSong: function(song) {
+	  return !!song.currently_playing;
 	},
 	hidePlaylist: function() {
 		$('#playlist').hide();

@@ -9,7 +9,6 @@ require File.expand_path("../partifi", File.basename(__FILE__))
 
 Partifi::DB.create_table :events do
   primary_key :id
-  String :current_song
   Time :starts_at
   Time :ends_at
 end
@@ -21,6 +20,7 @@ Partifi::DB.create_table :songs do
   String :href
   String :img
   Interger :event_id
+  boolean :currently_playing, :default => false
   Time :created_at
   Time :updated_at
   Time :started_at

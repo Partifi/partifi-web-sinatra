@@ -50,12 +50,12 @@ module Partifi
       self.table.filter(:event_id => id)
     end
 
-    def self.find_upcoming(id)
+    def self.find_playlist(id)
       self.table.filter(:event_id => id, :deleted_at => nil)
     end
 
-    def self.upcoming_by_href(href)
-      self.table.filter(:href => href)
+    def self.current_song_for(event_id)
+      self.table.filter(:event_id => event_id, :currently_playing => true)
     end
 
     def self.remove_from_event(params = {})
@@ -98,7 +98,7 @@ module Partifi
         end
       end
       songs_and_rank.compact!
-      songs_and_rank.sort! {|a,b| b[1] <=> a[1]}
+      songs_and_rank.sort! {|a,b| a[1] <=> b[1]}
       songs_and_rank.map {|song, _, lovers, haters| song.to_hash.merge(:lovers => lovers, :haters => haters) }
     end
 
@@ -156,7 +156,7 @@ module Partifi
     get "/playlist/:id" do
       content_type :json
 
-      songs = Songs.find_upcoming(params[:id]).all
+      songs = Songs.find_playlist(params[:id]).all
       result = Votes.order_songs_by_votes(songs).map(&:to_hash)
 
       playlist = { "Playlist" => []}
@@ -192,15 +192,12 @@ module Partifi
 
     get '/current_song/:event_id' do
       content_type :json
-      event = Event.find(params[:event_id])
-      event = Event.add_id(params[:event_id]) if event.nil?
-
-      song_href = event[:current_song]
-      Votes.for_songs(Songs.upcoming_by_href(song_href)).maps{|v| v[:user_id]}.uniq.to_json
+      Votes.for_songs(Songs.current_song_for(params[:event_id])).maps{|v| v[:user_id]}.uniq.to_json
     end
 
     post '/current_song/:event_id' do
-      Event.where(:id => params[:event_id]).update(:current_song => params[:uri])
+      Songs.table.filter(:event_id => params[:event_id], :currently_playing => true).update(:currently_playing => true, :deleted_at => Time.now)
+      Songs.table.filter(:event_id => params[:event_id], :href => params[:uri]).update(:currently_playing => true)
       200
     end
 
